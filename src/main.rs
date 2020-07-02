@@ -4,11 +4,6 @@ use std::time::Duration;
 fn main() {
     let mut publisher = Publisher::new();
 
-    publisher.add(Box::new(Counter::new()));
-    publisher.add(Box::new(TwoCounter::new()));
-    publisher.add(Box::new(Counter::new()));
-    publisher.add(Box::new(TwoCounter::new()));
-
     if let Err(e) = publisher.run() {
         eprintln!("Application error: {}", e);
         std::process::exit(1);
@@ -60,44 +55,4 @@ impl Publisher {
 trait Module {
     fn value(&self) -> String;
     fn update(&mut self);
-}
-
-struct Counter {
-    value: u16,
-}
-
-impl Counter {
-    fn new() -> Self {
-        Counter { value: 0 }
-    }
-}
-
-impl Module for Counter {
-    fn value(&self) -> String {
-        self.value.to_string()
-    }
-
-    fn update(&mut self) {
-        self.value += 1;
-    }
-}
-
-struct TwoCounter {
-    value: u64,
-}
-
-impl TwoCounter {
-    fn new() -> Self {
-        TwoCounter { value: 0 }
-    }
-}
-
-impl Module for TwoCounter {
-    fn value(&self) -> String {
-        self.value.to_string()
-    }
-
-    fn update(&mut self) {
-        self.value += 2;
-    }
 }
