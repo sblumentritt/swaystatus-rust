@@ -2,57 +2,57 @@ use std::error::Error;
 use std::time::Duration;
 
 fn main() {
-    let mut handler = ModuleHandler::new();
+    let mut publisher = Publisher::new();
 
-    handler.add(Box::new(Counter::new()), 1);
-    handler.add(Box::new(TwoCounter::new()), 1);
-    handler.add(Box::new(Counter::new()), 1);
-    handler.add(Box::new(TwoCounter::new()), 1);
+    publisher.add(Box::new(Counter::new()));
+    publisher.add(Box::new(TwoCounter::new()));
+    publisher.add(Box::new(Counter::new()));
+    publisher.add(Box::new(TwoCounter::new()));
 
-    if let Err(e) = handler.run() {
+    if let Err(e) = publisher.run() {
         eprintln!("Application error: {}", e);
         std::process::exit(1);
     }
 }
 
-#[allow(dead_code)]
-struct ModuleWrapper {
-    module: Box<dyn Module>,
-    interval: u8,
+struct Publisher {
+    modules: Vec<Box<dyn Module>>,
 }
 
-struct ModuleHandler {
-    modules: Vec<ModuleWrapper>,
-}
+impl Publisher {
+    const SPACER: &'static str = " :: ";
 
-impl ModuleHandler {
     fn new() -> Self {
-        ModuleHandler {
+        Publisher {
             modules: Vec::new(),
         }
     }
 
-    fn add(&mut self, module: Box<dyn Module>, interval: u8) {
-        self.modules.push(ModuleWrapper { module, interval });
+    fn add(&mut self, module: Box<dyn Module>) {
+        self.modules.push(module);
     }
 
-    fn buffer(&mut self) -> String {
+    fn publish(&mut self) {
         let mut buffer = String::new();
 
-        for item in self.modules.iter_mut() {
-            item.module.update();
+        for (index, item) in self.modules.iter_mut().enumerate() {
+            item.update();
 
-            buffer.push_str(" :: ");
-            buffer.push_str(item.module.value().as_str());
+            // the left side of the buffer (first element) should not start with spacer
+            if index != 0 {
+                buffer.push_str(Publisher::SPACER);
+            }
+
+            buffer.push_str(item.value().as_str());
         }
 
-        buffer
+        println!("{}", buffer);
     }
 
     fn run(&mut self) -> Result<(), Box<dyn Error>> {
         loop {
-            println!("{}", self.buffer());
-            std::thread::sleep(Duration::from_secs(1));
+            self.publish();
+            std::thread::sleep(Duration::from_secs(2));
         }
     }
 }
