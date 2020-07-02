@@ -4,6 +4,8 @@ use std::time::Duration;
 fn main() {
     let mut publisher = Publisher::new();
 
+    publisher.add(Box::new(module::DateTime::new()));
+
     if let Err(e) = publisher.run() {
         eprintln!("Application error: {}", e);
         std::process::exit(1);
@@ -55,4 +57,31 @@ impl Publisher {
 trait Module {
     fn value(&self) -> String;
     fn update(&mut self);
+}
+
+mod module {
+    use super::Module;
+
+    pub struct DateTime {
+        value: chrono::DateTime<chrono::Local>,
+    }
+
+    impl DateTime {
+        pub fn new() -> Self {
+            DateTime {
+                value: chrono::Local::now(),
+            }
+        }
+    }
+
+    impl Module for DateTime {
+        fn value(&self) -> String {
+            // TODO: find a way to change AM/PM to Japanese
+            self.value.format("%I:%M %p").to_string()
+        }
+
+        fn update(&mut self) {
+            self.value = chrono::Local::now();
+        }
+    }
 }
