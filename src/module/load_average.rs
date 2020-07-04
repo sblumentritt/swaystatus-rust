@@ -34,7 +34,7 @@ impl LoadAverage {
 impl Module for LoadAverage {
     fn value(&self) -> String {
         format!(
-            "{} {} {} ({})",
+            "{:.2} {:.2} {:.2} ({})",
             self.one, self.five, self.fiftteen, self.cpu_count
         )
     }
