@@ -1,4 +1,4 @@
-use crate::Module;
+use swaystatus::Module;
 
 pub struct DateTime {
     value: chrono::DateTime<chrono::Local>,

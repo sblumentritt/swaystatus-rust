@@ -1,4 +1,5 @@
-use crate::Module;
+use swaystatus::Module;
+
 use std::fs;
 
 pub struct LoadAverage {

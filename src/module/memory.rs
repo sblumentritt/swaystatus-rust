@@ -1,4 +1,5 @@
-use crate::Module;
+use swaystatus::Module;
+
 use lazy_static::lazy_static;
 use regex::Regex;
 use std::fs;
