@@ -14,13 +14,19 @@ impl LoadAverage {
     const CPUINFO_PATH: &'static str = "/proc/cpuinfo";
 
     pub fn new() -> Self {
-        // TODO: replace unwrap() calls with correct error handling
-        let cpu_count = fs::read_to_string(LoadAverage::CPUINFO_PATH)
-            .unwrap()
-            .lines()
-            .filter(|line| line.contains("model name"))
-            .collect::<Vec<_>>()
-            .len() as u8;
+        let cpu_count = match fs::read_to_string(LoadAverage::CPUINFO_PATH) {
+            Ok(content) => content
+                .lines()
+                .filter(|line| line.contains("model name"))
+                .collect::<Vec<_>>()
+                .len() as u8,
+            Err(err) => {
+                eprintln!("Error reading cpuinfo: {}", err);
+
+                // just use a default value as the program should still continue
+                0
+            }
+        };
 
         LoadAverage {
             one: 0.0,
@@ -40,20 +46,35 @@ impl Module for LoadAverage {
     }
 
     fn update(&mut self) {
-        // TODO: replace unwrap() calls with correct error handling
-        let loadavg = fs::read_to_string(LoadAverage::LOADAVG_PATH).unwrap();
+        let loadavg = match fs::read_to_string(LoadAverage::LOADAVG_PATH) {
+            Ok(content) => content,
+            Err(err) => {
+                eprintln!("Error reading loadavg: {}", err);
+                return;
+            }
+        };
+
+        let mut array: [f32; 3] = [0.0; 3];
 
         for (index, split) in loadavg.split_whitespace().enumerate() {
-            if index == 0 {
-                self.one = split.parse::<f32>().unwrap();
-            } else if index == 1 {
-                self.five = split.parse::<f32>().unwrap();
-            } else if index == 2 {
-                self.fiftteen = split.parse::<f32>().unwrap();
-
+            if index <= 2 {
+                array[index] = match split.parse::<f32>() {
+                    Ok(value) => value,
+                    Err(err) => {
+                        eprintln!("Problem parsing value as f32: {}", err);
+                        -1.0
+                    }
+                };
+            } else {
                 // stop the for-loop as no more data is needed
                 break;
             }
+        }
+
+        if !array.contains(&-1.0) {
+            self.one = array[0];
+            self.five = array[1];
+            self.fiftteen = array[2];
         }
     }
 }
