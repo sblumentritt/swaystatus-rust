@@ -10,3 +10,5 @@ linux-musl:
   artifacts:
     paths:
       - target/x86_64-unknown-linux-musl/release/swaystatus
+  only:
+    - tags
