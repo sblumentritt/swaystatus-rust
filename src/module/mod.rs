@@ -1,7 +1,7 @@
 // NOTE: is this really the best way?
 
-mod date_time;
-pub use self::date_time::DateTime;
+mod clock;
+pub use self::clock::Clock;
 
 mod load_average;
 pub use self::load_average::LoadAverage;

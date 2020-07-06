@@ -1,18 +1,18 @@
 use swaystatus::Module;
 
-pub struct DateTime {
+pub struct Clock {
     value: chrono::DateTime<chrono::Local>,
 }
 
-impl DateTime {
+impl Clock {
     pub fn new() -> Self {
-        DateTime {
+        Clock {
             value: chrono::Local::now(),
         }
     }
 }
 
-impl Module for DateTime {
+impl Module for Clock {
     fn value(&self) -> String {
         // TODO: find a way to change AM/PM to Japanese
         self.value.format("%I:%M %p").to_string()

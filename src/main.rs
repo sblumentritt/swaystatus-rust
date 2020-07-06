@@ -6,7 +6,7 @@ fn main() {
 
     publisher.add(Box::new(module::LoadAverage::new()));
     publisher.add(Box::new(module::Memory::new()));
-    publisher.add(Box::new(module::DateTime::new()));
+    publisher.add(Box::new(module::Clock::new()));
 
     if let Err(e) = publisher.run() {
         eprintln!("Application error: {}", e);
