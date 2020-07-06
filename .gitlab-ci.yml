@@ -1,0 +1,8 @@
+image: "rust:alpine"
+
+build:
+  script:
+    - cargo build --release --target x86_64-unknown-linux-musl
+  artifacts:
+    paths:
+      - target/x86_64-unknown-linux-musl/release/swaystatus
