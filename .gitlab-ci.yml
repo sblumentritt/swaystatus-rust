@@ -1,6 +1,10 @@
 image: "rust:alpine"
 
-build:
+stages:
+  - build
+
+linux-musl:
+  stage: build
   script:
     - cargo build --release --target x86_64-unknown-linux-musl
   artifacts:
