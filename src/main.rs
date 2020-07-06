@@ -1,8 +1,7 @@
 mod module;
-use swaystatus::Publisher;
 
 fn main() {
-    let mut publisher = Publisher::new();
+    let mut publisher = swaystatus::Publisher::new();
 
     publisher.add(Box::new(module::LoadAverage::new()));
     publisher.add(Box::new(module::Memory::new()));
