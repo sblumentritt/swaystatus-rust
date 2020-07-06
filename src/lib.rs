@@ -1,4 +1,3 @@
-use std::error::Error;
 use std::time::Duration;
 
 pub trait Module {
@@ -40,7 +39,7 @@ impl Publisher {
         println!("{}", buffer);
     }
 
-    pub fn run(&mut self) -> Result<(), Box<dyn Error>> {
+    pub fn run(&mut self) {
         loop {
             self.publish();
             std::thread::sleep(Duration::from_secs(2));
