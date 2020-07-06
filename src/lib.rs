@@ -48,7 +48,7 @@ impl Publisher {
             buffer.push_str(item.value().as_str());
         }
 
-        println!("{}", buffer);
+        println!("{} ", buffer);
     }
 
     /// Main loop which publishes the data every 2 seconds.
