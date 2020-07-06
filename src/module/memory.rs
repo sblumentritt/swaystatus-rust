@@ -42,8 +42,13 @@ impl Module for Memory {
             static ref SLAB_RE: Regex = Regex::new(r"\bSlab:\s*(\d*)").unwrap();
         }
 
-        // TODO: replace unwrap() calls with correct error handling
-        let meminfo = fs::read_to_string(Memory::MEMINFO_PATH).unwrap();
+        let meminfo = match fs::read_to_string(Memory::MEMINFO_PATH) {
+            Ok(content) => content,
+            Err(err) => {
+                eprintln!("Error reading meminfo: {}", err);
+                return;
+            }
+        };
 
         // find the values with the help of the regexes and convert them from KB to MB
         for cap in MEMTOTAL_RE.captures_iter(meminfo.as_str()) {
