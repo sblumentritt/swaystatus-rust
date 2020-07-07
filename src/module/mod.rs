@@ -8,3 +8,6 @@ pub use self::load_average::LoadAverage;
 
 mod memory;
 pub use self::memory::Memory;
+
+mod archlinux;
+pub use self::archlinux::Updates;

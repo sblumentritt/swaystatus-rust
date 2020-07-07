@@ -3,6 +3,7 @@ mod module;
 fn main() {
     let mut publisher = swaystatus::Publisher::new();
 
+    publisher.add(Box::new(module::Updates::new()));
     publisher.add(Box::new(module::LoadAverage::new()));
     publisher.add(Box::new(module::Memory::new()));
     publisher.add(Box::new(module::Clock::new()));
