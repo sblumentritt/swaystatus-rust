@@ -36,7 +36,13 @@ impl Module for Updates {
             };
 
             if !output.status.success() {
-                eprintln!("Command executed with failing error code");
+                // the script returns the error code 2 when no updates are available
+                if output.status.code().unwrap() == 2 {
+                    self.update_count = 0;
+                } else {
+                    eprintln!("Command executed with failing error code");
+                }
+
                 return;
             }
 
