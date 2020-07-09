@@ -1,5 +1,10 @@
 image: "rust:alpine"
 
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - target/
+
 stages:
   - build
 
