@@ -4,7 +4,7 @@
 mod module;
 
 fn main() {
-    let mut publisher = swaystatus::Publisher::new();
+    let mut publisher = swaystatus::Publisher::default();
 
     publisher.add(Box::new(module::Updates::new()));
     publisher.add(Box::new(module::LoadAverage::new()));

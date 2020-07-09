@@ -9,6 +9,7 @@ pub trait Module {
 }
 
 /// Holds a list of modules.
+#[derive(Default)]
 pub struct Publisher {
     modules: Vec<Box<dyn Module>>,
 }
@@ -16,13 +17,6 @@ pub struct Publisher {
 impl Publisher {
     /// Spacer which will be used between modules values.
     const SPACER: &'static str = " :: ";
-
-    /// Returns a publisher with an empty list.
-    pub fn new() -> Self {
-        Publisher {
-            modules: Vec::new(),
-        }
-    }
 
     /// Adds a module to the list
     ///

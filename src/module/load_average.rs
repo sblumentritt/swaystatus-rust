@@ -14,12 +14,12 @@ impl LoadAverage {
     const CPUINFO_PATH: &'static str = "/proc/cpuinfo";
 
     pub fn new() -> Self {
-        let cpu_count = match fs::read_to_string(LoadAverage::CPUINFO_PATH) {
+        let cpu_count = match fs::read_to_string(Self::CPUINFO_PATH) {
+            #[allow(clippy::cast_possible_truncation)]
             Ok(content) => content
                 .lines()
                 .filter(|line| line.contains("model name"))
-                .collect::<Vec<_>>()
-                .len() as u8,
+                .count() as u8,
             Err(err) => {
                 eprintln!("Error reading cpuinfo: {}", err);
 
@@ -28,7 +28,7 @@ impl LoadAverage {
             }
         };
 
-        LoadAverage {
+        Self {
             one: 0.0,
             five: 0.0,
             fiftteen: 0.0,
@@ -46,7 +46,7 @@ impl Module for LoadAverage {
     }
 
     fn update(&mut self) {
-        let loadavg = match fs::read_to_string(LoadAverage::LOADAVG_PATH) {
+        let loadavg = match fs::read_to_string(Self::LOADAVG_PATH) {
             Ok(content) => content,
             Err(err) => {
                 eprintln!("Error reading loadavg: {}", err);

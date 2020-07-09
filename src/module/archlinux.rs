@@ -8,8 +8,8 @@ pub struct Updates {
 }
 
 impl Updates {
-    pub fn new() -> Self {
-        Updates {
+    pub const fn new() -> Self {
+        Self {
             update_count: 0,
             call_count: 0,
         }

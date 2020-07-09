@@ -6,7 +6,7 @@ pub struct Clock {
 
 impl Clock {
     pub fn new() -> Self {
-        Clock {
+        Self {
             value: chrono::Local::now(),
         }
     }

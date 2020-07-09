@@ -16,8 +16,8 @@ pub struct Memory {
 impl Memory {
     const MEMINFO_PATH: &'static str = "/proc/meminfo";
 
-    pub fn new() -> Self {
-        Memory {
+    pub const fn new() -> Self {
+        Self {
             total: 0,
             free: 0,
             buffers: 0,
@@ -42,7 +42,7 @@ impl Module for Memory {
             static ref SLAB_RE: Regex = Regex::new(r"\bSlab:\s*(\d*)").unwrap();
         }
 
-        let meminfo = match fs::read_to_string(Memory::MEMINFO_PATH) {
+        let meminfo = match fs::read_to_string(Self::MEMINFO_PATH) {
             Ok(content) => content,
             Err(err) => {
                 eprintln!("Error reading meminfo: {}", err);
