@@ -6,9 +6,18 @@ cache:
     - target/
 
 stages:
+  - lint
   - build
 
-linux-musl:
+lint-linux-musl:
+  stage: lint
+  before_script:
+    - rustup component add clippy
+  script:
+    # fail when encountering warnings from the clippy::all category
+    - cargo clippy -- -D clippy::all
+
+build-linux-musl:
   stage: build
   script:
     - cargo build --release --target x86_64-unknown-linux-musl
