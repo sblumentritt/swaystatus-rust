@@ -1,4 +1,5 @@
-// NOTE: is this really the best way?
+// load the modules from the external files e.g. module/clock.rs as private
+// and bring the structs into this 'mod' which abstracts the file hierarchy
 
 mod clock;
 pub use self::clock::Clock;
